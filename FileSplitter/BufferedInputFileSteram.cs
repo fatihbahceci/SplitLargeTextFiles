@@ -40,6 +40,8 @@ namespace FileSplitter
 
         public bool EOF { get { return input.Position > input.Length; } }
 
+        public long FileSize { get { return input.Length; } }
+
         public void Dispose()
         {
             if (input != null)
