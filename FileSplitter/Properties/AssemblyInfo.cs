@@ -32,7 +32,9 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.1")]
-[assembly: AssemblyFileVersion("1.0.0.1")]
-//yyyy-MM-dd
-//2019-12-16 1.0.0.1: First release
+[assembly: AssemblyVersion("1.0.0.2")]
+[assembly: AssemblyFileVersion("1.0.0.2")]
+///yyyy-MM-dd
+///2019-12-19 1.0.0.2: Autosave/load last states.
+///                    Set OpenFile/Folder initial directory to previous selected path.
+///2019-12-16 1.0.0.1: First release

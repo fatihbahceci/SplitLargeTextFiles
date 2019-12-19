@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FileSplitter.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,52 +17,83 @@ namespace FileSplitter
 {
     public partial class MainForm : Form
     {
+        private AppConfig config;
+        private string AppDir
+        {
+            get
+            {
+                return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            }
+        }
+
+        private string ConfigFilePath { get { return Path.Combine(AppDir, "Config.json"); } }
         public MainForm()
         {
             InitializeComponent();
-        }
-       
-/*
-        private void kelle()
-        {
-            const int BUFFER_SIZE = 1 * 1024 * 1024;
-            byte[] buffer = new byte[BUFFER_SIZE];
-            string fileName = Path.GetFileNameWithoutExtension(tSource.Text);
-            string fileExt = Path.GetExtension(tSource.Text);
-            int maxFileSize = Convert.ToInt32(tMaxFileSize.Text);
-            string filter = tDelimiter.Text;
-            if (cbExtended.Checked)
+            if (File.Exists(ConfigFilePath))
             {
-                filter = filter
-                    .Replace("\\r", "\r")
-                    .Replace("\\n", "\r")
-                    .Replace("\\t", "\r")
-                    .Replace("\\\\", "\\")
-                    .Replace("\\0", "\0");
+                try { config = AppConfig.FromJson(File.ReadAllText(ConfigFilePath)); } catch { }
             }
-            byte[] bfilter = Encoding.UTF8.GetBytes(filter);
-            using (Stream input = File.OpenRead(tSource.Text))
+            if (config == null)
+            {
+                config = new AppConfig();
+            }
+            ucSplitByFilter1.Config = config.SplitByFilter;
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                File.WriteAllText(ConfigFilePath, config.ToJson());
+            }
+            catch
             {
 
+            }
+        }
 
-                int index = 0;
-                while (input.Position < input.Length)
+        /*
+                private void kelle()
                 {
-                    using (Stream output = File.Create($@"{tOutputDirectory.Text}\{fileName}_{ index.ToString().PadLeft(4, '0')}.{fileExt}"))
+                    const int BUFFER_SIZE = 1 * 1024 * 1024;
+                    byte[] buffer = new byte[BUFFER_SIZE];
+                    string fileName = Path.GetFileNameWithoutExtension(tSource.Text);
+                    string fileExt = Path.GetExtension(tSource.Text);
+                    int maxFileSize = Convert.ToInt32(tMaxFileSize.Text);
+                    string filter = tDelimiter.Text;
+                    if (cbExtended.Checked)
                     {
-                        int remaining = maxFileSize, bytesRead;
-                        while (remaining > 0 && (bytesRead = input.Read(buffer, 0,
-                                Math.Min(remaining, BUFFER_SIZE))) > 0)
+                        filter = filter
+                            .Replace("\\r", "\r")
+                            .Replace("\\n", "\r")
+                            .Replace("\\t", "\r")
+                            .Replace("\\\\", "\\")
+                            .Replace("\\0", "\0");
+                    }
+                    byte[] bfilter = Encoding.UTF8.GetBytes(filter);
+                    using (Stream input = File.OpenRead(tSource.Text))
+                    {
+
+
+                        int index = 0;
+                        while (input.Position < input.Length)
                         {
-                            output.Write(buffer, 0, bytesRead);
-                            remaining -= bytesRead;
+                            using (Stream output = File.Create($@"{tOutputDirectory.Text}\{fileName}_{ index.ToString().PadLeft(4, '0')}.{fileExt}"))
+                            {
+                                int remaining = maxFileSize, bytesRead;
+                                while (remaining > 0 && (bytesRead = input.Read(buffer, 0,
+                                        Math.Min(remaining, BUFFER_SIZE))) > 0)
+                                {
+                                    output.Write(buffer, 0, bytesRead);
+                                    remaining -= bytesRead;
+                                }
+                            }
+                            index++;
+                            Thread.Sleep(500); // experimental; perhaps try it
                         }
                     }
-                    index++;
-                    Thread.Sleep(500); // experimental; perhaps try it
                 }
-            }
-        }
-*/
+        */
     }
 }

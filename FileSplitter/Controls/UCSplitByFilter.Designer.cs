@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.btnSelectOutputDirectory = new System.Windows.Forms.Button();
             this.btnSelectSourceFile = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -43,6 +44,8 @@
             this.openFileDlg = new System.Windows.Forms.OpenFileDialog();
             this.folderDLG = new System.Windows.Forms.FolderBrowserDialog();
             this.pb = new System.Windows.Forms.ProgressBar();
+            this.bsConfig = new System.Windows.Forms.BindingSource(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.bsConfig)).BeginInit();
             this.SuspendLayout();
             // 
             // btnSelectOutputDirectory
@@ -90,6 +93,7 @@
             // 
             this.tSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.tSource.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsConfig, "SourceFile", true));
             this.tSource.Location = new System.Drawing.Point(15, 47);
             this.tSource.Name = "tSource";
             this.tSource.Size = new System.Drawing.Size(581, 20);
@@ -109,6 +113,7 @@
             // 
             this.tOutputDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.tOutputDirectory.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsConfig, "OutputDirectory", true));
             this.tOutputDirectory.Location = new System.Drawing.Point(15, 110);
             this.tOutputDirectory.Name = "tOutputDirectory";
             this.tOutputDirectory.Size = new System.Drawing.Size(581, 20);
@@ -128,6 +133,7 @@
             // 
             this.tDelimiter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.tDelimiter.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsConfig, "SplitterFilter", true));
             this.tDelimiter.Location = new System.Drawing.Point(15, 166);
             this.tDelimiter.Name = "tDelimiter";
             this.tDelimiter.Size = new System.Drawing.Size(449, 20);
@@ -149,6 +155,7 @@
             this.cbExtended.AutoSize = true;
             this.cbExtended.Checked = true;
             this.cbExtended.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbExtended.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.bsConfig, "IsExtendedSplitterFilter", true));
             this.cbExtended.Location = new System.Drawing.Point(479, 167);
             this.cbExtended.Name = "cbExtended";
             this.cbExtended.Size = new System.Drawing.Size(78, 19);
@@ -158,6 +165,7 @@
             // 
             // tMaxFileSize
             // 
+            this.tMaxFileSize.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsConfig, "MaxFileSizeBytes", true));
             this.tMaxFileSize.Location = new System.Drawing.Point(15, 236);
             this.tMaxFileSize.Name = "tMaxFileSize";
             this.tMaxFileSize.Size = new System.Drawing.Size(100, 20);
@@ -175,6 +183,10 @@
             this.pb.Name = "pb";
             this.pb.Size = new System.Drawing.Size(615, 23);
             this.pb.TabIndex = 21;
+            // 
+            // bsConfig
+            // 
+            this.bsConfig.DataSource = typeof(FileSplitter.Models.SplitByFilterConfig);
             // 
             // UCSplitByFilter
             // 
@@ -195,6 +207,7 @@
             this.Controls.Add(this.tMaxFileSize);
             this.Name = "UCSplitByFilter";
             this.Size = new System.Drawing.Size(645, 587);
+            ((System.ComponentModel.ISupportInitialize)(this.bsConfig)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -217,5 +230,6 @@
         private System.Windows.Forms.OpenFileDialog openFileDlg;
         private System.Windows.Forms.FolderBrowserDialog folderDLG;
         private System.Windows.Forms.ProgressBar pb;
+        private System.Windows.Forms.BindingSource bsConfig;
     }
 }

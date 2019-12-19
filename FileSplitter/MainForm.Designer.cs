@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            FileSplitter.Models.SplitByFilterConfig splitByFilterConfig1 = new FileSplitter.Models.SplitByFilterConfig();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.ucSplitByFilter1 = new FileSplitter.Controls.UCSplitByFilter();
@@ -58,6 +59,12 @@
             // 
             // ucSplitByFilter1
             // 
+            splitByFilterConfig1.IsExtendedSplitterFilter = false;
+            splitByFilterConfig1.MaxFileSizeBytes = 5242880;
+            splitByFilterConfig1.OutputDirectory = null;
+            splitByFilterConfig1.SourceFile = null;
+            splitByFilterConfig1.SplitterFilter = ")\\r\\n;";
+            this.ucSplitByFilter1.Config = splitByFilterConfig1;
             this.ucSplitByFilter1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ucSplitByFilter1.Location = new System.Drawing.Point(3, 3);
             this.ucSplitByFilter1.Name = "ucSplitByFilter1";
@@ -71,7 +78,8 @@
             this.ClientSize = new System.Drawing.Size(602, 575);
             this.Controls.Add(this.tabControl1);
             this.Name = "MainForm";
-            this.Text = "Mother Form";
+            this.Text = "Grandmother Form";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);

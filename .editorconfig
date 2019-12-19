@@ -1,0 +1,2 @@
+#See https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-language-conventions?view=vs-2019#csharp_style_expression_bodied_properties
+csharp_style_expression_bodied_properties = false
