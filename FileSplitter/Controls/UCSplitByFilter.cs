@@ -9,29 +9,108 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using FileSplitter.Models;
+using System.Runtime.Remoting.Channels;
+using System.Text.RegularExpressions;
 
 namespace FileSplitter.Controls
 {
     public partial class UCSplitByFilter : UserControl
     {
-        private SplitByFilterConfig _config = new SplitByFilterConfig();
+
+        public static string ByteToString(long byteCount)
+        {
+            string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; // suffixes for units
+            if (byteCount == 0)
+            {
+                return "0 " + suf[0];
+            }
+
+            long bytes = Math.Abs(byteCount);
+            int place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
+            double num = Math.Round(bytes / Math.Pow(1024, place), 2);
+            return (Math.Sign(byteCount) * num).ToString() + " " + suf[place];
+        }
+
+        private SplitByFilterConfig ___config;
+        private SplitByFilterConfig initConfig(SplitByFilterConfig config = null)
+        {
+            if (config == null) config = new SplitByFilterConfig();
+            lBytes.Text = ByteToString(config.MaxFileSizeBytes);
+
+            config.PropertyChanged += (s, e) =>
+            {
+                switch (e.PropertyName)
+                {
+                    case nameof(SplitByFilterConfig.MaxFileSizeBytes):
+                        lBytes.Text = ByteToString((s as SplitByFilterConfig).MaxFileSizeBytes);
+                        break;
+                }
+            };
+            return config;
+        }
         public SplitByFilterConfig Config
         {
-            get { return _config; }
+            get { return ___config ?? (___config = initConfig()); }
             set
             {
-                _config = value ?? new SplitByFilterConfig();
-                bsConfig.DataSource = _config;
+                ___config = initConfig(value);
+                bsConfig.DataSource = ___config;
             }
         }
+
+        private void setTooltip(Control ctrl, string text, string title = "Tip", bool instantShow = false)
+        {
+            var toolTip = new ToolTip()
+            {
+                Active = true,
+                ToolTipTitle = title,
+                ToolTipIcon = ToolTipIcon.Info,
+                UseFading = true,
+                UseAnimation = true,
+                IsBalloon = true,
+                ShowAlways = true,
+                AutoPopDelay = 5000,
+                ReshowDelay = 0,
+                InitialDelay = 0,
+                BackColor = Color.Red,
+                ForeColor = Color.White
+            };
+            if (instantShow)
+            {
+                toolTip.Show(text, ctrl, 5000);
+            }
+            else
+            {
+                toolTip.SetToolTip(ctrl, text);
+            }
+
+        }
+        const string EXTENDED_TT = @"Use Special Characters
+\t: Horizontal Tab
+\r: Carriage Return
+\n: Line Feed
+\0: ASCII 0
+\\: Escape Character";
+        const string DELIMITER_TT = @"Special Characters (In Extended Mode)
+\t: Horizontal Tab
+\r: Carriage Return
+\n: Line Feed
+\0: ASCII 0
+\\: Escape Character";
         public UCSplitByFilter()
         {
             InitializeComponent();
+            setTooltip(cbExtended, EXTENDED_TT);
+            setTooltip(tDelimiter, DELIMITER_TT);
+            //tDelimiter.MouseHover += (s, e) =>
+            //{
+            //    setTooltip(tDelimiter, DELIMITER_TT, instantShow: true);
+            //};
         }
 
         private string getFilePath(string fileName, string fileExt, int index)
         {
-            return $@"{Config.OutputDirectory}\{fileName}_{ index.ToString().PadLeft(4, '0')}.{fileExt}";
+            return $@"{Config.OutputDirectory}\{fileName}_{index.ToString().PadLeft(4, '0')}.{fileExt}";
         }
 
         private byte[] GetFilter()
@@ -60,7 +139,7 @@ namespace FileSplitter.Controls
                 string SOURCE_FILE_PATH = Config.SourceFile;
                 string TARGET_FILE_PREFIX = Path.GetFileNameWithoutExtension(SOURCE_FILE_PATH);
                 string TARGET_FILE_EXTENSION = Path.GetExtension(Config.SourceFile);
-                int MAXIMUM_OUTPUT_FILE_SIZE = Config.MaxFileSizeBytes;
+                long MAXIMUM_OUTPUT_FILE_SIZE = Config.MaxFileSizeBytes;
                 byte[] SPLIT_FILTER = GetFilter();
 
                 int currentOutputFileNumber = 0;

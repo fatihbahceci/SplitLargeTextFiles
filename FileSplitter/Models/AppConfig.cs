@@ -16,12 +16,13 @@ namespace FileSplitter.Models
         private string outputDirectory;
         private string splitterFilter;
         private bool isExtendedSplitterFilter;
-        private int maxFileSizeBytes;
+        private long maxFileSizeBytes;
 
         public SplitByFilterConfig()
         {
             SplitterFilter = @")\r\n;";
             MaxFileSizeBytes = 5 * 1024 * 1024;
+            IsExtendedSplitterFilter = true;
         }
 
 
@@ -31,7 +32,7 @@ namespace FileSplitter.Models
 
         public bool IsExtendedSplitterFilter { get => isExtendedSplitterFilter; set { isExtendedSplitterFilter = value; NotifyPropertyChanged(); } }
 
-        public int MaxFileSizeBytes { get => maxFileSizeBytes; set { maxFileSizeBytes = value; NotifyPropertyChanged(); } }
+        public long MaxFileSizeBytes { get => maxFileSizeBytes; set { maxFileSizeBytes = value; NotifyPropertyChanged(); } }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

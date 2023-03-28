@@ -32,9 +32,11 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.2")]
-[assembly: AssemblyFileVersion("1.0.0.2")]
+[assembly: AssemblyVersion("1.0.0.3")]
+[assembly: AssemblyFileVersion("1.0.0.3")]
 ///yyyy-MM-dd
+///2023-03-28 1.0.0.3: #3 Improper Handling of Exceptional Conditions in Newtonsoft.Json
+///                    Some small tips were added. (There is no change in terms of performance) 
 ///2019-12-19 1.0.0.2: Autosave/load last states.
 ///                    Set OpenFile/Folder initial directory to previous selected path.
 ///2019-12-16 1.0.0.1: First release
